@@ -1,4 +1,4 @@
-name := "MailgunScala"
+name := "mailgun-scala"
 
 organization := "com.roundeights"
 
