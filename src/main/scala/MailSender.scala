@@ -43,12 +43,12 @@ trait MailSender {
 
 /** A mail sender for Mailgun */
 class Mailgun
-    ( apiKey: String )
+    ( server: String, apiKey: String )
     ( implicit val ctx: ExecutionContext )
 extends MailSender {
 
     /** The mailgun API url */
-    private val url = "https://api.mailgun.net/v2/samples.mailgun.org/messages"
+    private val url = "https://api.mailgun.net/v2/" + server + "/messages"
     //private val url = "http://requestb.in/"
 
     /** A list of headers to send along with each request */
@@ -67,7 +67,7 @@ extends MailSender {
     }
 
     /** {@inheritDoc} */
-    override def toString = "MailgunSender"
+    override def toString = "MailgunSender(%s)".format( server )
 }
 
 
