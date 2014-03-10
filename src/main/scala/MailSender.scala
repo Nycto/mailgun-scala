@@ -39,6 +39,11 @@ trait MailSender {
     def send(
         to: String, from: String, subject: String, body: String
     ): Future[MailSender.Response] = send( new Email(to, from, subject, body) )
+
+    /** Sends the given email and returns a response */
+    def send(
+        to: Email.Addr, from: Email.Addr, subject: String, body: Email.Body
+    ): Future[MailSender.Response] = send( Email(to, from, subject, body) )
 }
 
 /** A mail sender for Mailgun */

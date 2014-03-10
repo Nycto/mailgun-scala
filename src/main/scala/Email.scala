@@ -3,8 +3,16 @@ package com.roundeights.mailgun
 /** @see Email */
 object Email {
 
+    /** @see Addr */
+    object Addr {
+
+        /** Alternate constructor */
+        def apply( address: String, name: String ): Addr
+            = new Addr(address, Some(name))
+    }
+
     /** An email address */
-    case class Addr ( val address: String, val name: Option[String] ) {
+    case class Addr ( val address: String, val name: Option[String] = None ) {
 
         /** Returns this email address encoded as a string */
         def encode: String = name match {
