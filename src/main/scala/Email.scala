@@ -38,11 +38,13 @@ object Email {
     /** Uses text for the body of an email */
     def text( content: String ): TextBody = new TextBody {
         override def toMap = Map( "text" -> content )
+        override def toString = "Text(%s)".format(content)
     }
 
     /** Uses html for the body of an email */
     def html( content: String ): HtmlBody = new HtmlBody {
         override def toMap = Map( "html" -> content )
+        override def toString = "Html(%s)".format(content)
     }
 
     /** Uses text and html for the body of an email */
@@ -51,6 +53,8 @@ object Email {
         htmlContent: String
     ): TextBody with HtmlBody = new TextBody with HtmlBody {
         override def toMap = Map("text" -> textContent, "html" -> htmlContent)
+        override def toString =
+            "Html(%s) Text(%s)".format(textContent, htmlContent)
     }
 }
 
