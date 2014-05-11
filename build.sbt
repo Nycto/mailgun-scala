@@ -19,6 +19,6 @@ credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 // Application dependencies
 libraryDependencies ++= Seq(
     "com.roundeights" %% "scalon" % "0.2",
-    "net.databinder.dispatch" %% "dispatch-core" % "0.11.0"
+    "net.databinder.dispatch" %% "dispatch-core" % "0.11.1"
 )
 
