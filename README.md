@@ -1,4 +1,4 @@
-MailgunScala [![Build Status](https://secure.travis-ci.org/Nycto/Scalon.png?branch=master)](http://travis-ci.org/Nycto/MailgunScala)
+MailgunScala [![Build Status](https://secure.travis-ci.org/Nycto/mailgun-scala.png?branch=master)](http://travis-ci.org/Nycto/mailgun-scala)
 ============
 
 A Scala wrapper around the Mailgun sending API. Their documentation can
