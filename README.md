@@ -63,6 +63,21 @@ this instead:
 val sender: MailSender = new MailSender.Dummy
 ```
 
+Adding it to your Project
+-------------------------
+
+Add the following directives to your `build.sbt` file:
+
+```
+resolvers ++= Seq(
+    "RoundEights" at "http://maven.spikemark.net/roundeights"
+)
+
+libraryDependencies ++= Seq(
+    "com.roundeights" %% "mailgun-scala" % "0.2"
+)
+```
+
 License
 -------
 
