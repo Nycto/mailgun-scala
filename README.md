@@ -39,13 +39,19 @@ object Main extends App {
 
     // The response is a future containing the message and id of the sent email.
     // The future will be failed if the send attempt failed
-    Await.result(
-        response.map(data => {
-            println( data.id )
-            println( data.message )
-        }),
-        3.seconds
-    )
+    try {
+        Await.result(
+            response.map(data => {
+                println( data.id )
+                println( data.message )
+            }),
+            3.seconds
+        )
+    }
+    finally {
+        // Shutdown the open connections
+        sender.close
+    }
 }
 ```
 

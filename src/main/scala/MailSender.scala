@@ -1,9 +1,8 @@
 package com.roundeights.mailgun
 
-import com.roundeights.scalon.{nObject, nParser}
+import com.roundeights.scalon.{nObject, nParser, nElement}
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
-import dispatch._
 
 /** @see MailSender */
 object MailSender {
@@ -26,7 +25,13 @@ object MailSender {
 
         /** {@inheritDoc} */
         override def toString = "DummyMailSender"
+
+        /** {@inheritDoc} */
+        override def close = {}
     }
+
+    /** An error encountered while executing a request */
+    class Error( message: String ) extends Exception( message )
 }
 
 /** An interface for sending emails */
@@ -44,13 +49,18 @@ trait MailSender {
     def send(
         to: Email.Addr, from: Email.Addr, subject: String, body: Email.Body
     ): Future[MailSender.Response] = send( Email(to, from, subject, body) )
+
+    /** Shutsdown the underlying client */
+    def close: Unit
 }
 
 /** A mail sender for Mailgun */
-class Mailgun
-    ( server: String, apiKey: String )
-    ( implicit val ctx: ExecutionContext )
-extends MailSender {
+class Mailgun (
+    server: String, apiKey: String,
+    msTimeout: Int = 3000, maxConnections: Int = 3
+) (
+    implicit val ctx: ExecutionContext
+) extends MailSender {
 
     /** The mailgun API url */
     private val url = "https://api.mailgun.net/v2/" + server + "/messages"
@@ -63,16 +73,25 @@ extends MailSender {
         Map("Authorization" -> ("Basic " + encoded))
     }
 
+    /** The sends and parses requests */
+    private val client = new Requestor( msTimeout, maxConnections )
+
     /** {@inheritDoc} */
     override def send ( email: Email ): Future[MailSender.Response] = {
-        val request = dispatch.url( url ) << email.toMap <:< headers
-        Http( request.OK(as.String) )
-            .map( nParser.jsonObj _ )
-            .map( new MailSender.Response(_) )
+        try {
+            client.request( url, headers, email.toMap )
+                .map( new MailSender.Response(_) )
+        }
+        catch {
+            case e: Throwable => Future.failed(e)
+        }
     }
 
     /** {@inheritDoc} */
     override def toString = "MailgunSender(%s)".format( server )
+
+    /** {@inheritDoc} */
+    override def close = client.close
 }
 
 
