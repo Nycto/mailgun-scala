@@ -31,8 +31,8 @@ object Main extends App {
 
     // Send an email
     val response: Future[MailSender.Response] = sender.send( Email(
-        to = Email.Addr("Joe User", "mailgun-scala@mailinator.com"),
-        from = Email.Addr("Test App", "nobody@example.com"),
+        to = Email.Addr("mailgun-scala@mailinator.com", "Joe User"),
+        from = Email.Addr("nobody@example.com", "Test App"),
         subject = "Testing out Mailgun-Scala",
         body = Email.html("16 sodium atoms walk into a bar followed by Batman")
     ) )

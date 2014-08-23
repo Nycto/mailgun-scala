@@ -11,8 +11,24 @@ object Email {
             = new Addr(address, Some(name))
     }
 
+    /**
+     * A simple regex to do a quick check on an email address. I'm not
+     * interested in being thorough here, its just a sanity check. The Mailgun
+     * server will do more extensive checks.
+     */
+    private lazy val emailRegex = List(
+        """^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+""",
+        """@""",
+        """[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"""
+    ).mkString.r
+
     /** An email address */
     case class Addr ( val address: String, val name: Option[String] = None ) {
+
+        if ( emailRegex.findFirstIn(address) == None ) {
+            throw new IllegalArgumentException(
+                "Invalid email address: %s".format(address))
+        }
 
         /** Returns this email address encoded as a string */
         def encode: String = name match {
