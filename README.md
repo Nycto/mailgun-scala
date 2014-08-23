@@ -9,46 +9,52 @@ http://documentation.mailgun.com/api-sending.html
 Example
 -------
 
-Start by instantiating a `MailSender` for your application:
+The following example shows how to instantiate and send an email:
 
 ```scala
-import com.roundeights.mailgun.{MailSender, Mailgun}
+package testApp
 
-lazy val sender: MailSender = {
-    if ( System.getProperty("mailgun.isProd") != "true" ) {
-        // In development, don't send actual mail
-        new MailSender.Dummy
-    }
-    else {
-        new Mailgun(
-            System.getProperty("mailgun.server"),
-            System.getProperty("mailgun.key")
-        )
-    }
+import com.roundeights.mailgun.{MailSender, Mailgun, Email}
+
+import scala.concurrent._
+import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
+
+object Main extends App {
+
+    // A MailSender coordinates the sending of email
+    // Configure it with the server and api key that Mailgun provided on signup
+    val sender: MailSender = new Mailgun(
+        server = "samples.mailgun.org",
+        apiKey = "key-3ax6xnjp29jd6fds4gc373sgvjxteol0"
+    )
+
+    // Send an email
+    val response: Future[MailSender.Response] = sender.send( Email(
+        to = Email.Addr("Joe User", "mailgun-scala@mailinator.com"),
+        from = Email.Addr("Test App", "nobody@example.com"),
+        subject = "Testing out Mailgun-Scala",
+        body = Email.html("16 sodium atoms walk into a bar followed by Batman")
+    ) )
+
+    // The response is a future containing the message and id of the sent email.
+    // The future will be failed if the send attempt failed
+    Await.result(
+        response.map(data => {
+            println( data.id )
+            println( data.message )
+        }),
+        3.seconds
+    )
 }
 ```
 
-Using it is then a single method call:
+If you want to use a Dummy mail sender outside of production, you can do
+this instead:
 
 ```scala
-import com.roundeights.mailgun.Email
-import scala.concurrent.Future
-import scale.concurrent.ExecutionContext.Implicits.global
-
-val response: Future[MailSender.Response] = sender.send(
-    to = Email.Addr( "Joe User", "joe@example.com" ),
-    from = Email.Addr( "Team Foo Bar", "contact@foobar.example.com" ),
-    subject = "Welcome to Foo Bar!",
-    body = Email.html( "Hey! Thanks for signing up." ),
-    tag = Some("welcome")
-)
-
-// The response is a future containing the message and id of the sent email.
-// The future will be failed if the send attempt failed
-response.map(data => {
-    println( data.id )
-    println( data.message )
-})
+// A dummy mail sender will always return a success response
+val sender: MailSender = new MailSender.Dummy
 ```
 
 License
