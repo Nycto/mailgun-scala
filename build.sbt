@@ -4,7 +4,7 @@ organization := "com.roundeights"
 
 version := "0.2"
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.11.7"
 
 // Compiler flags
 scalacOptions ++= Seq("-deprecation", "-feature")
@@ -18,7 +18,7 @@ credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
 // Application dependencies
 libraryDependencies ++= Seq(
-    "com.roundeights" %% "scalon" % "0.2",
-    "com.ning" % "async-http-client" % "1.8.12"
+    "com.roundeights" %% "scalon" % "0.+",
+    "com.ning" % "async-http-client" % "1.+"
 )
 

@@ -26,11 +26,11 @@ private class Requestor
     = this(
         new AsyncHttpClient(
             new AsyncHttpClientConfig.Builder()
-                .setCompressionEnabled(true)
-                .setFollowRedirects(false)
-                .setAllowPoolingConnection(true)
-                .setRequestTimeoutInMs( timeout )
-                .setMaximumConnectionsPerHost( maxConnections )
+                .setMaxRedirects(3)
+                .setAllowPoolingConnections(true)
+                .setAllowPoolingSslConnections(true)
+                .setRequestTimeout( timeout )
+                .setMaxConnectionsPerHost( maxConnections )
                 .build()
         )
     )
@@ -56,7 +56,7 @@ private class Requestor
 
         headers.foreach( pair => builder.addHeader( pair._1, pair._2 ) )
 
-        params.foreach( pair => builder.addParameter( pair._1, pair._2 ) )
+        params.foreach( pair => builder.addQueryParam( pair._1, pair._2 ) )
 
         request( builder.build )
     }
