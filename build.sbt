@@ -19,6 +19,6 @@ credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 // Application dependencies
 libraryDependencies ++= Seq(
     "com.roundeights" %% "scalon" % "0.2",
-    "com.ning" % "async-http-client" % "1.+"
+    "com.ning" % "async-http-client" % "1.9+"
 )
 
