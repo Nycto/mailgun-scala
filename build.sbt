@@ -2,7 +2,7 @@ name := "mailgun-scala"
 
 organization := "com.roundeights"
 
-version := "0.2.1"
+version := "0.2.2"
 
 scalaVersion := "2.11.7"
 
@@ -18,7 +18,7 @@ credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
 // Application dependencies
 libraryDependencies ++= Seq(
-    "com.roundeights" %% "scalon" % "0.2",
-    "com.ning" % "async-http-client" % "1.9+"
+    "com.roundeights" %% "scalon" % "0.+",
+    "com.ning" % "async-http-client" % "1.+"
 )
 
